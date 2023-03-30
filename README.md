@@ -1,0 +1,1 @@
+Repository for school work: exercise, projects... in semester 2022.2
