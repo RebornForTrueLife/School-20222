@@ -31,9 +31,6 @@
      while (1) {
         // READ each input line
         fgets(line, LINE_SIZE, stdin);
-
-        printf("## %s", line);
-
         // CHECK if line is "#": GET OUT
         if (line[0] == '#')
             break;
