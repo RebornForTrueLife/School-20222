@@ -211,13 +211,9 @@ int solve(int *solution, int a, int b, int c) {
 				3. if delta > 0: multiplier(x1) = 2; multiplier(x2) = 1
 	*/
 int get_multi(int *solution, int length, int *multiplier, int a, int b, int c) {
-	switch (length) {
-		case 0: 
-			return 0;
-		case 1:
-			// case 1 and 2 solved together
-		case 2:
-			int x1 = solution[0];	// choose 1 root
+	// there is 1 or 2 roots
+	if ((length == 2) || (length == 1)) {
+		int x1 = solution[0];	// choose 1 root
 			int h = a + x1;
 			int g = b + (h * x1);
 			int delta = (h * h) - (4 * g);
@@ -241,14 +237,19 @@ int get_multi(int *solution, int length, int *multiplier, int a, int b, int c) {
 				put_value(multiplier, 0, 1);
 				return 1;
 			}	// close if
-		case 3:
-			// each root has multiplier is 1
+	}	// close if
+	// 3 roots
+	if (length == 3)	{
+		// each root has multiplier is 1
 			put_value(multiplier, 0, 1);
 			put_value(multiplier, 1, 1);
 			put_value(multiplier, 2, 1);
 			return 3;
-		default:
-			printf("WARNING: The number of solution is not valid!\n");
-			break;
-	}	// close switch
+	}	// close if
+	// NO SOLUTION
+	if (length == 0)
+		return 0;
+	// invalid number of roots
+	printf("WARNING: The number of solution is not valid!\n");
+	return -1;		
 }	// close get_multi
