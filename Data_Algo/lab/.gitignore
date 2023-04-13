@@ -1,0 +1,6 @@
+
+# Git ignore files
+
+# For C/C++ language
+*.o
+*.exe
