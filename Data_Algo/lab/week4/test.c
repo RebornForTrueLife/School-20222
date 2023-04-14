@@ -1,23 +1,25 @@
 #include <stdio.h>
- #include <stdlib.h>
+#include <stdlib.h>
+#include <string.h>
 
- // CONST
- const int SIZE = 20;           // size of string vars
- const int LINE_SIZE = 100;     // size of input line
+
+// CONST
+const int SIZE = 20;           // size of string vars
+const int LINE_SIZE = 100;     // size of input line
 
 // STRUCTURE DECLARE
 struct Transaction {
-    char *fromAcc;      // from account
-    char *toAcc;        // to account
-    long amount;        // money
-    char *timePoint;    // time
-    char *atm;          // location
+char *fromAcc;      // from account
+char *toAcc;        // to account
+long amount;        // money
+char *timePoint;    // time
+char *atm;          // location
 };
 
 // FUNC DECLARE
 /*  a function to read each lines from stdin until reach character: '#'
-        PUT line to given list
-        CHANGE the size to the number of actual read */
+    PUT line to given list
+    CHANGE the size to the number of actual read */
 void read_line(char **list, int *size);
 
 
@@ -28,6 +30,10 @@ int main() {
     int count = 0;
     read_line(list, &count);
     printf("## number transaction = %d\n", count);
+
+    char str1[] = "T000000044";
+    char str2[] = "T000000013";
+    printf("Compare T000000044 - T000000013: %d\n", strcmp(str1, str2));
 }   // close main
 
 

@@ -10,7 +10,7 @@
  // CONST
  const int SIZE = 20;           // size of string vars
  const int LINE_SIZE = 100;     // size of input line
- const int TRANS_SIZE = 100000;  // number of transaction
+ const int TRANS_SIZE = 1000000;  // number of transaction
 
 // STRUCTURE DECLARE
 struct Transaction {
@@ -41,6 +41,12 @@ void read_line(char **list, int *size);
     - output: return value in listQuery */
  void total_amount(struct Transaction **list, int size, struct Query **listQuery, int sizeQuery);
 
+/*  a function to convert account string to an integer
+    - input: the account string
+    - output: an integer */
+int getID(char *acc);
+
+
  // main
  int main() {
      // DECLARE
@@ -52,12 +58,11 @@ void read_line(char **list, int *size);
 
 
      // Debug mode
-     freopen("data.in", "r", stdin);
+     // freopen("data.in", "r", stdin);
 
 
      // Read list of transaction, stop when reach the line: '#'
      // WHILE true
-     char *line;      // input line
      // allocate LINE_SIZE memory for store transaction lines
      char **list = (char**) malloc ( TRANS_SIZE * sizeof(char*));
      int count = 0;   // number of transaction
@@ -70,10 +75,10 @@ void read_line(char **list, int *size);
         // input data from line to list of Transaction
     for (int i = 0; i < count; i ++ ) {
         // allocate new memory
-        fromAcc = (char *) malloc (SIZE * sizeof(char));
-        toAcc = (char *) malloc (SIZE * sizeof(char));
-        timePoint = (char *) malloc (SIZE * sizeof(char));
-        atm = (char *) malloc (SIZE * sizeof(char));
+        fromAcc = (char *) calloc (SIZE, sizeof(char));
+        toAcc = (char *) calloc (SIZE, sizeof(char));
+        timePoint = (char *) calloc (SIZE, sizeof(char));
+        atm = (char *) calloc (SIZE, sizeof(char));
         // read data in line
         int number = sscanf(list[i], "%s %s %ld %s %s", fromAcc, toAcc, &money, timePoint, atm);
         if (number != 5) {   // not enough data
@@ -91,41 +96,36 @@ void read_line(char **list, int *size);
 
     // Read query of user: only one query for this program: total transaction money
     int queryCount = 0;     // the number of query
-    int accCount = 0;       // number of unique accounts
     // read list of query lines
     read_line(list, &queryCount);
     // read account from query list
+        // query list contains query in input order
     struct Query **listQuery = (struct Query **) malloc (queryCount * sizeof(struct Query *));
-    struct Query **listActualQuery = (struct Query **) malloc (queryCount * sizeof(struct Query *));
+        // query list contains unique accounts
+    struct Query **listUniQuery = (struct Query **) malloc (TRANS_SIZE * sizeof(struct Query *));
+    memset(listUniQuery, (int) NULL, TRANS_SIZE);
     for (int i = 0; i < queryCount; i ++ ) {
-        char *query = (char *) malloc (LINE_SIZE * sizeof(char));
-        char *acc = (char *) malloc (LINE_SIZE * sizeof(char));
+        char *query = (char *) calloc (LINE_SIZE, sizeof(char));
+        char *acc = (char *) calloc (LINE_SIZE, sizeof(char));
         int number = sscanf(list[i], "%s %s", query, acc);
+        // get ID number of account
+        int id = getID(acc);
         // check if acc already stored in query list
-        int flag = 0;   // not seen
-        int accIndex = 0;
-        for (accIndex = 0; accIndex < accCount; accIndex ++) {
-            if (strcmp(acc, listQuery[accIndex]->acc) == 0) {
-                flag = 1;   // seen
-                // DEBUG
-                printf("## %s - %d\n", acc, accIndex);
-                break;
-            }   // close if
-        }   // close for 1
-
-        if (flag == 0) {  // if account already seen, just move to next query
-            listActualQuery[accCount] = (struct Query *) malloc (sizeof(struct Query));
-            listActualQuery[accCount]->acc = acc;
-            listActualQuery[accCount]->result = 0;
-            accIndex = accCount;
-            accCount += 1;
+        if (listUniQuery[id] == NULL) { // if query has NOT been seen
+            // create new query
+            struct Query *newQuery = (struct Query *) malloc (sizeof(struct Query));
+            newQuery->acc = acc;
+            newQuery->result = 0;
+            // put new query to unique query list
+            listUniQuery[id] = newQuery;
         }   // close if
-        listQuery[i] = listActualQuery[accIndex];
+        // add query to query list
+        listQuery[i] = listUniQuery[id];
     }   // close for
     // print out the query result
-    total_amount(listTrans, count, listActualQuery, accCount);
+    total_amount(listTrans, count, listUniQuery, TRANS_SIZE);
     for (int i = 0; i < queryCount; i ++ ) {
-        printf("%s - %ld\n", listQuery[i]->acc, listQuery[i]->result);
+        printf("%ld\n", listQuery[i]->result);
     }   // close for
     return 0;
  }  // close main
@@ -162,15 +162,19 @@ void read_line(char **list, int *size) {
 
 // get total amount
 void total_amount(struct Transaction **list, int size, struct Query **listQuery, int sizeQuery) {
-    long total = 0;
     // check each transaction in the list
     for (int i = 0; i < size; i ++ ) {
         // check for each query
-        for (int j = 0; j < sizeQuery; j ++ ) {
-            if (strcmp(list[i]->fromAcc, listQuery[j]->acc) == 0) {    // matched account
-                listQuery[j]->result += list[i]->amount;
-                // break;
-            }   // close if
-        }   // close for 1
+        int id = getID(list[i]->fromAcc);
+        if (listQuery[id] != NULL)
+            listQuery[id]->result += list[i]->amount;
     }   // close for
 }   // close total_amount
+
+
+// get id number from account
+int getID(char *acc) {
+    // get ID from fifth char to the end of string
+    int id = atoi(acc + 4);
+    return id;
+}   // close getID
