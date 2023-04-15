@@ -1,0 +1,6 @@
+# Question 6.1
+1. What happens if users choose "cancel"?
+	> The "Save and Launch" dialog will be closed without any changes
+2. How to custimize the options label to user?
+	> Using method: "showOptionDialog" instead of "showConfirmDialog"
+	> Passing the desired option list to the method
