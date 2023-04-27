@@ -1,0 +1,6 @@
+
+# git ignore file
+
+# Object and running file C/C++
+*.o
+*.exe
