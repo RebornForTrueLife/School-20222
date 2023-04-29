@@ -53,6 +53,10 @@ void read_data() {
         for (int col = 0; col < numCity; col ++ )
             scanf("%d", &distance[row][col]);
     }   // close for
+    // initialize mark array
+    for (int i = 0; i < numCity; i ++ ) {
+        mark[i] = 0;
+    }   // close for
 }   // close read_data
 
 
@@ -60,7 +64,7 @@ void read_data() {
 int validate(int city, int des, int length) {
     if (mark[city] == 1)
         return 0;
-    if ( (length + distance[des][city]) > maxLength)
+    if ( (length + distance[tour[des - 1]][city]) > maxLength)
         return 0;
     return 1;
 }   // close validate
@@ -73,10 +77,15 @@ void tryDes(int des, int length) {
             continue;
         tour[des] = city;
         mark[city] = 1;
-        if (des == numCity - 1)
+        if (des == numCity - 1) {
             count += 1;
-        else
-            tryDes(des + 1, length + distance[des - 1][des]);
+            printf("Tour: ");
+            for (int i = 0; i < numCity; i ++ ) {
+                printf("%d ", tour[i]);
+            }   // close for
+            printf("\n");
+        } else
+            tryDes(des + 1, length + distance[tour[des - 1]][tour[des]]);
         mark[city] = 0;
     }   // close for
 }   // close tryDes
