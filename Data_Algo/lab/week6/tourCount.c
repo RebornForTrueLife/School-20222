@@ -5,6 +5,10 @@
 
 #include <stdio.h>
 
+// MODE
+#define CODING
+// #undef CODING
+
 
 // CONST
 #define SIZE 16     // max number of cities
@@ -79,11 +83,13 @@ void tryDes(int des, int length) {
         mark[city] = 1;
         if (des == numCity - 1) {
             count += 1;
-            printf("Tour: ");
-            for (int i = 0; i < numCity; i ++ ) {
-                printf("%d ", tour[i]);
-            }   // close for
-            printf("\n");
+            #ifdef CODING
+                printf("Tour: ");
+                for (int i = 0; i < numCity; i ++ ) {
+                    printf("%d ", tour[i]);
+                }   // close for
+                printf("\n");
+            #endif  // CODING
         } else
             tryDes(des + 1, length + distance[tour[des - 1]][tour[des]]);
         mark[city] = 0;
