@@ -1,0 +1,38 @@
+
+# Answer document for Lab03
+
+*NOTE: For Teaching assistant, the Lab01 also has been reorganized due to the section 8 of this lab
+	- Below Answes are listed in order of sections *
+
+
+2. Practice Overloading:
+	
+	> Question: what do I prefer in this case?
+
+	> Answer:
+
+		- In this case, arbitrary number of dvds is more prefered because customers may want to buy arbitrary number of dvd, so it's nice to not use fixed number of dvds in an array
+
+
+3. Passing parameters
+
+3.1. Question: Is JAVA a Pass by Value or a Pass by Reference programming language?
+	
+	> Answer: Java is a pass by value programming language
+
+3.2. Question: After the call of swap(jungleDVD, cinderellaDVD) why does the title of these two objects still remain?
+
+	> Answer: Because when we passing a reference as parameter, compiler pass the copy of the value of the reference, so the variable holding the passed reference does not change its value, which is a reference in this case
+
+3.3. Question: After the call of changeTitle(jungleDVD, cinderellaDVD.getTitle()) why is the title of the JungleDVD changed?
+
+	> Answer: The title changed because: passing jungleDVD means passing a copy of the reference, so using that copy reference can also change the properties of the object, whose reference refers to
+
+
+6. Open Cart class
+
+	> Question: Write a toString() method for the DigitalVideoDisc class. What should be the return type of this method?
+
+	> Answer: A string, which represents the information of the dvd
+
+

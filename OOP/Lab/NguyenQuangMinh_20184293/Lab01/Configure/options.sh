@@ -1,0 +1,1 @@
+-d /home/minh/School/Learning/20222/OOP/Lab/NguyenQuangMinh_20184293/Lab01/bin
