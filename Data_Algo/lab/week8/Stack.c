@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 // DATA STRUCTURE
@@ -19,8 +20,20 @@
 		+ PUSH operation is performed by adding new element at the begin of the list
 		+ POP operation is to remove and return the head element of the list
  */
+
+// operators of stack
+typedef enum {PUSH, POP} Operator;
+
+// operation structure for a stack
+typedef struct Operation {
+	Operator op;
+	int operand;
+	struct Operation *next;		// pointer to the next operation
+} Operation;
+
+
 typedef struct Node {
-	char value;
+	int value;
 	struct Node *next;
 } Node;
 
@@ -39,11 +52,27 @@ Stack *initializeStack();
 int isEmpty(Stack *stack);
 
 // push value
-void push(Stack *stack, char value);
+void push(Stack *stack, int value);
 
 // pop value
 char pop(Stack *stack);
 
+// read list of operations from stdin
+Operation *readOperations();
+
+// solve list of operations given a stack
+void solve(Stack *stack, Operation *ops);
+
+
+int main(int argc, char const *argv[]) {
+	// intialize a stack
+	Stack *stack = initializeStack();
+	// read the list of operations
+	Operation *ops = readOperations();
+	// solve operations
+	solve(stack, ops);
+	return 0;
+}	// end  main 
 
 
 // FUNC DEFINE
@@ -57,7 +86,7 @@ Stack *initializeStack() {
 
 
 // push value
-void push(Stack *stack, char value) {
+void push(Stack *stack, int value) {
 	isEmpty(stack);		// just to check if stack has been initialized
 	// create new node
 	Node *node = (Node*) malloc (sizeof(Node));
@@ -69,8 +98,8 @@ void push(Stack *stack, char value) {
 
 // pop value
 char pop(Stack *stack) {
-	char value = '\0';				// default return value
-	if (isEmpty(stack) == 1) {		// stack is not empty
+	int value = 0;					// default return value
+	if (isEmpty(stack) == 0) {		// stack is not empty
 		value = stack->head->value;
 		Node *tmp = stack->head;
 		// let head point to below element
@@ -91,3 +120,60 @@ int isEmpty(Stack *stack) {
 		return 1;		
 	return 0;					// stack is not emtpy
 }	// close isEmpty
+
+
+// read operations
+Operation *readOperations() {
+	Operation *ops = (Operation*) malloc (sizeof(Operation));		// initialize operation list
+	ops->next = NULL;												// reserve the first operation as a HEAD with no data
+	Operation *head = ops;
+	int LINE_SIZE = 100;
+	char *buffer = (char*) malloc (LINE_SIZE * sizeof(char));		// an input line
+	while (!feof(stdin)) {
+		memset(buffer, '\0', LINE_SIZE);	// empty buffer
+		fgets(buffer, LINE_SIZE, stdin);	// read a line
+		if (buffer[0] == '#')		// whether reach the list terminator: #
+			break;
+		// read operator, operand
+		char opStr[5];				// operator in string
+		int operand;				// operand
+		Operator op;
+		sscanf(buffer, "%s %d", opStr, &operand);
+		// classify operator
+		if (strcmp(opStr, "PUSH") == 0)
+			op = PUSH;
+		else if (strcmp(opStr, "POP") == 0)
+			op = POP;
+		else
+			continue;				// unknown operator, ignore the case and move to next operation
+		// add operation to the ops list
+		Operation *operation = (Operation*) malloc (sizeof(Operation));
+		operation->op = op;
+		operation->operand = operand;
+		operation->next = NULL;
+		ops->next = operation;
+		ops = operation;
+	}	// while	
+	return head;
+}	// close readOperations
+
+
+// solve list of operations given a stack
+void solve(Stack *stack, Operation *ops) {
+	while (ops->next != NULL) {
+		ops = ops->next;
+		switch (ops->op) {
+		case PUSH:
+			push(stack, ops->operand);
+			break;
+		case POP:
+			if (isEmpty(stack) == 0)
+				printf("%d\n", pop(stack));
+			else
+				printf("NULL\n");
+			break;
+		default:
+			break;
+		}	// switch
+	}	// while
+}	// close solve
