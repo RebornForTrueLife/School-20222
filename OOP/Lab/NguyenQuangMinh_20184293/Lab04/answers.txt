@@ -1,0 +1,34 @@
+
+# Answer document for Lab04
+
+10. Unique Item in the list
+	1. If the passing object is not an instance of Media, what happens?
+		- So, the result of equals() is FALSE
+		*In equals method, should check the class of obj by `instanceof` keyword*
+
+11. Polymorphism
+	1. Iterate through the list and print out the information of the media by using toString() method. Observe what happens and explain in detail.
+		- Observe: The result of toString() if each subclass is printed
+		- Explain: so cd, dvd, book are declared are all Media. When toString method of a media is called, it call the toString method of actual object which maybe cd, dvd, book.
+
+12. Sort Media in the cart
+	1. What class should implement the Comparable interface?
+		> Media class
+	2. How should I implement the compareTo() method to reflect the ordering you want?
+		> You want the list of media to be sorted in 2 way: (1) decreasing cost then title; (2) title then cost
+		> So I have to implement 2 functions in 1 method, then I will make a flag inside the compareTo().
+		So that the method could give different result due to each FLAG value. Flag values can be: "COST", "TITLE".
+	3. Can I have 2 ordering rules of the item if I usr Comparable interface approach?
+		> As I mentioned in the question 12.2: YES, but it does not mean we should.
+
+	4. If DVD has a different ordering rule, how would I modify my code to allow this?
+		> I will let DVD implement Comparable interface, apply that ordering rule for only DVD.
+
+
+===
+working track
+Aims menu
+	View Store
+		See a media detail;
+			store: load list media from file
+		mediaDetailsMenu()

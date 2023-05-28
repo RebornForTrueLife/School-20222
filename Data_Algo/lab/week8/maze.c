@@ -258,6 +258,10 @@ void born(PathTree *tree, Node *node);
 // check if a location is possible move from given node
 int isPossibleLocation(PathTree *tree, Node *node, Location *loc);
 
+// prune tree from given node upto its ancestor
+void pruneNode(Node *node);
+
+
 // OPERATION DEFINE
 // initialize path tree
 PathTree *initializePathTree(Maze *maze) {
@@ -280,8 +284,10 @@ Node *buildPathTree(PathTree *tree) {
 		if (isExitNode(tree, node) == 1)
 			return node;
 		born(tree, node);
-		for (int i = 0; i < node->children->size; i ++ ) 
-			push(queue, node->children->list[i]);
+		if (node->children != NULL)
+			for (int i = 0; i < node->children->size; i ++ ) 
+				push(queue, node->children->list[i]);
+		pruneNode(node);
 	}	// while
 	return NULL;
 }	// close buildPathTree
@@ -296,24 +302,36 @@ int isExitNode(PathTree *tree, Node *node) {
 
 // assign list of children to a given node
 void born(PathTree *tree, Node *node) {
-	ListNode *children = (ListNode*) malloc (sizeof(ListNode));
-	// list contain 4 address of possible nodes
-	children->list = (Node**) malloc (sizeof(Node*) * 4);
 	int size = 0;
 	Direction directs[4] = {NORTH, EAST, SOUTH, WEST};
+	int isDirects[4];
 	for (int i = 0; i < 4; i ++ ) {
 		Location *loc = getLocation(node->value, directs[i]);
 		if (isPossibleLocation(tree, node, loc) == 1) {
+			isDirects[i] = 1;
+			size += 1;
+		} else 
+			isDirects[i] = 0;
+		free(loc);
+	}	// for
+	if (size == 0) {	// no possible move
+		node->children = NULL;
+		return;
+	}	// if 
+	node->children = (ListNode*) malloc (sizeof(ListNode));
+	node->children->list = (Node**) malloc (sizeof(Node*) * size);
+	node->children->size = size;
+	int count = 0;
+	for (int i = 0; i < 4; i ++ ) 
+		if (isDirects[i] == 1) {
+			Location *loc = getLocation(node->value, directs[i]);
 			Node *child = (Node*) malloc (sizeof(Node));
 			child->parent = node;
 			child->children = NULL;
 			child->value = loc;
-			children->list[size] = child;
-			size += 1;
+			node->children->list[count] = child;
+			count += 1;
 		}	// if
-	}	// for
-	children->size = size;
-	node->children = children;
 }	// close born
 
 
@@ -343,6 +361,51 @@ int getNumStep(PathTree *tree, Node *node) {
 	}	// close while
 	return step;
 }	// close getNumStep
+
+
+// check if a node has no child
+int isNoChild(Node *node) {
+	if (node->children == NULL)
+		return 1;
+	if (node->children->size == 0)
+		return 1;
+	return 0;
+}	// close isNoChild
+
+
+// free memory of a node
+void freeNode(Node *node) {
+	free(node->value);
+	if (node->children != NULL) 
+		free(node->children);
+	free(node);
+}	// close freeNode
+
+
+// remove a node from parent
+void removeNodeFromParent(Node *parent, Node *node) {
+	int pos = 0;
+	for (; pos < parent->children->size; pos ++ ) {
+		if (parent->children->list[pos] == node)
+			break;
+	}	// close for
+	for (int i = pos; i < parent->children->size - 1; i ++ ) {
+		parent->children->list[i] = parent->children->list[i + 1];
+	}	// close for
+	parent->children->size -= 1;
+}	// close removeNodeFromParent
+
+
+// prune tree from a node
+void pruneNode(Node *node) {
+	if (isNoChild(node) == 0)
+		return;
+	Node *parent = node->parent;
+	removeNodeFromParent(parent, node);
+	freeNode(node);
+	pruneNode(parent);
+}	// close pruneNode
+
 
 // ##################### PATH-TREE #################
 

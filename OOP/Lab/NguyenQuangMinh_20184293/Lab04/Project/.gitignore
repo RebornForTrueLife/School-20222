@@ -1,0 +1,11 @@
+
+# ignore file
+
+
+# ignore class
+/bin/
+
+
+# ignore Configure running
+makefile
+Configure/

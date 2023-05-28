@@ -73,6 +73,10 @@ born( node ):
 			CONTINUE
 		possibleMove.add(loc)
 
-pruneNode ( tree, node )
-	
+pruneNode ( node )
+	IF node.children is  NOT empty:
+		RETURN
+	REMOVE node FROM node.parent.children
+	pruneNode(node.parent)
+	FREE node
 ```
