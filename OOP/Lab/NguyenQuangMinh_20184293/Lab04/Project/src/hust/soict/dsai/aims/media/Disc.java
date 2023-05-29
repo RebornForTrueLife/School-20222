@@ -7,16 +7,18 @@ import hust.soict.dsai.aims.media.Media;
 
 
 public class Disc extends Media {
-	private int length;
-	private String director;
+
+	// property
+	private String director;		
 
 
 	// Constructor
 	public Disc() {
+		setId(count);
+		count += 1;			// The total number of Media created
 		setTitle("unknown");
 		setCategory("unknown");
 		setDirector("unknown");
-		setLength(0);
 		setCost(0);
 	}	// close constructor #1
 	
@@ -38,12 +40,6 @@ public class Disc extends Media {
 		this(title, category, cost);
 		setDirector(director);
 	}	// close constructor #4
-	
-	
-	public Disc(String title, String category, String director, int length, float cost) {
-		this (title, category, director, cost);
-		setLength(length);
-	}	// close constructor #5
 
 
 	// getters	
@@ -52,8 +48,8 @@ public class Disc extends Media {
 	}	// close getDirector
 	
 	
-	public int getLength() {
-		return length;
+	public int getLength() {		// it's must be override by subclasses
+		return 0;
 	}	// close getLength
 	
 	
@@ -61,9 +57,5 @@ public class Disc extends Media {
 	void setDirector(String director) {
 		this.director = director;
 	}	// close setDirector
-	
-	
-	void setLength(int length) {
-		this.length = length;
-	}	// close setLength
+
 }	// close Disc

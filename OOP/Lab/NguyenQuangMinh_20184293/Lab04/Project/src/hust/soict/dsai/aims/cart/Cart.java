@@ -11,6 +11,7 @@ import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.CompactDisc;
 import hust.soict.dsai.aims.media.Book;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -82,40 +83,59 @@ public class Cart {
 	}	// close print
 
 
-	// /* search dvd by id */
-	// public void search(int id) {
-	// 	for (int i = 0; i < qtyOrdered; i ++ ) {
-	// 		DigitalVideoDisc dvd = itemsOrdered[i];
-	// 		if (dvd.getId() == id) {
-	// 			System.out.println("# Found DVD: " + dvd.toString());
-	// 			return;
-	// 		}	// close if
-	// 	}	// close for
-	// 	System.out.println("# There is no DVD with Id: " + id);
-	// }	// close seach by id
+	/* search media by id */
+	public Media search(int id) {
+		for (Media media: itemsOrdered) {
+			if (media.getId() == id)	// found
+				return media;
+		}	// close
+		return null;					// not found
+	}	// close seach by id
 
 
-	// /* search dvd by title */
-	// public void search(String title) {
-	// 	int count = 0;
-	// 	for (int i = 0; i < qtyOrdered; i ++ ) {
-	// 		DigitalVideoDisc dvd = itemsOrdered[i];
-	// 		if (dvd.isMatch(title)) {
-	// 			count += 1;
-	// 			System.out.println("# Found: " + dvd.toString());
-	// 		}	// close if
-	// 	}	// close for
-	// 	if (count == 0)
-	// 		System.out.println("# No DVD found with title: " + title);
-	// }	// close search by title
+	/* search dvd by title */
+	public List<Media> search(String title) {
+		List<Media> list = new ArrayList<Media>();
+		for (Media media: itemsOrdered) {
+			if (media.isMatch(title))
+				list.add(media);		// found a match
+		}	// close count
+		return list;					// return empty list if no media found
+	}	// close search by title
 
 
-	public static void main(String[] args) {
-		Cart cart = new Cart();
-		cart.addMedia(new Book("jungle", "adventure", 10.5f));
-		cart.addMedia(new CompactDisc("mountain", "view", "holme", "dr.who", 5.6f));
-		cart.addMedia(new DigitalVideoDisc("conan", "detective", "conan", 90, 2.7f));
-		cart.print();
-	}	// close main
+	/*
+		Sort the cart the list of media base on given option: Cost-Title or Title-Cost
+	 */
+	public void sort(String option) {
+		option = option.trim().toLowerCase();
+		switch (option) {
+		case "cost-title":					// sort by cost then title
+			Collections.sort(itemsOrdered, Media.COMPARE_BY_COST_TITLE);
+			System.out.println("The cart is sorted by decreased cost then title!");
+			break;
+		case "title-cost":					// sort by title then cost
+			Collections.sort(itemsOrdered, Media.COMPARE_BY_TITLE_COST);
+			System.out.println("The cart is sorted by title then decreased cost");
+			break;
+		default:
+			System.out.println("Invalid sorting option, valid options: cost-title, title-cost");
+			return;
+		}	// close switch
+	}	// close sort
+
+
+	/*
+		place the order: print receive(total cost), empty the list of media
+	 */
+	public String placeOrder() {
+		if (itemsOrdered.isEmpty())
+			return "The cart is empty! - Unable to place an order";
+		StringBuffer receipt = new StringBuffer();
+		receipt.append("There are " + itemsOrdered.size() +" in the cart with total cost: " + totalCost() + "\n");
+		itemsOrdered.clear();
+		receipt.append("Order is received! Clear the cart!");
+		return receipt.toString();
+	}	// close placeOrder
 	
 }	// close class

@@ -12,7 +12,6 @@ import hust.soict.dsai.aims.media.Playable;
 public class DigitalVideoDisc extends Disc implements Playable {
 	
 	// Properties
-	private String director;			// DVD director
 	private int length;				// length of DVD, time unit
 		
 	
@@ -45,14 +44,28 @@ public class DigitalVideoDisc extends Disc implements Playable {
 	}	// close constructor #5
 
 
+	// SETTER for length
+	void setLength(int length) {
+		this.length = length;
+	}	// close setLength
+
+
+	// GETTER for length
+	@Override
+	public int getLength() {		// it's must be override by subclasses
+		return length;
+	}	// close getLength
+
+
 	/* get the information of the DVD */
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer("DVD - ");
-		buffer.append("Title: " + getTitle() + " - ");
-		buffer.append("Category: " + getCategory() + " - ");
-		buffer.append("Director: " + getDirector() + " - ");
-		buffer.append("Length: " + getLength() + " - ");
+		StringBuffer buffer = new StringBuffer("DVD ___ ");
+		buffer.append("ID: " + getId() + " ___ ");
+		buffer.append("Title: " + getTitle() + " ___ ");
+		buffer.append("Category: " + getCategory() + " ___ ");
+		buffer.append("Director: " + getDirector() + " ___ ");
+		buffer.append("Length: " + getLength() + " ___ ");
 		buffer.append(getCost() + " $");
 		return buffer.toString();
 	}	// close toString

@@ -5,21 +5,25 @@
 package hust.soict.dsai.aims.media;
 
 import java.util.Comparator;
+import java.util.Collections;
 
 
 public abstract class Media {
-	private int id;				// book id
+	private int id;				
 	private String title;	
 	private String category;
 	private float cost;
 	public static final Comparator<Media> COMPARE_BY_TITLE_COST;
 	public static final Comparator<Media> COMPARE_BY_COST_TITLE;
+	protected static int count;		// the total number of Media created
 
 	static {
 		MediaComparatorByCost costComparator = new MediaComparatorByCost();
+		Comparator<Media> costComparatorReverse = Collections.reverseOrder(costComparator);
 		MediaComparatorByTitle titleComparator = new MediaComparatorByTitle();
-		COMPARE_BY_COST_TITLE = costComparator.thenComparing(titleComparator);
-		COMPARE_BY_TITLE_COST = titleComparator.thenComparing(costComparator);
+		COMPARE_BY_COST_TITLE = costComparatorReverse.thenComparing(titleComparator);
+		COMPARE_BY_TITLE_COST = titleComparator.thenComparing(costComparatorReverse);
+		count = 0;
 	}	// static block
 
 
@@ -49,7 +53,7 @@ public abstract class Media {
 	
 	
 	// SETTERs
-	void setId(int id) {
+	protected void setId(int id) {
 		this.id = id;
 	}	// close setId
 

@@ -25,10 +25,5 @@
 		> I will let DVD implement Comparable interface, apply that ordering rule for only DVD.
 
 
-===
-working track
-Aims menu
-	View Store
-		See a media detail;
-			store: load list media from file
-		mediaDetailsMenu()
+* NOTE: for project code *
+In showMenu, at 'Update store', in 'add media' function: for simplicity, each type Media will be inputed with some of its attribute, example: just title, category and cost

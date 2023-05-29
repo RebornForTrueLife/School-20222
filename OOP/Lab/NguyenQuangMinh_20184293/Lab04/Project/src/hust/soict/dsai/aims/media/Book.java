@@ -14,12 +14,14 @@ public class Book extends Media {
 
 	// default constructor
 	public Book() {
-		this("unknown", "unknown", 0);
+		setId(count);
+		count += 1;			// The total number of Media created
+		authors = new ArrayList<String> ();
 	}	// close constructor
 
 
 	public Book(String title, String category, float cost) {
-		authors = new ArrayList<String> ();
+		this();
 		setTitle(title);
 		setCategory(category);
 		setCost(cost);
@@ -54,15 +56,16 @@ public class Book extends Media {
 
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer("Book - ");
-		buffer.append("Title: " + getTitle() + " - ");
-		buffer.append("Category: " + getCategory() + " - ");
+		StringBuffer buffer = new StringBuffer("Book ___ ");
+		buffer.append("ID: " + getId() + " ___ ");
+		buffer.append("Title: " + getTitle() + " ___ ");
+		buffer.append("Category: " + getCategory() + " ___ ");
 		buffer.append("Authors: ");
 		if (authors.isEmpty())
 			buffer.append("unknown");
 		for (String author: authors)
 			buffer.append("'" + author + "' ");
-		buffer.append(" - " + getCost() + " $");
+		buffer.append(" ___ " + getCost() + " $");
 		return buffer.toString();
 	}	// close toString
 

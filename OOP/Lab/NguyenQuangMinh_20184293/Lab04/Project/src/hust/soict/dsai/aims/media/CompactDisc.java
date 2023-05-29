@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 public class CompactDisc extends Disc implements Playable {
+
 	private String artist;
 	private List<Track> tracks = new ArrayList<Track>();
 
@@ -99,12 +100,13 @@ public class CompactDisc extends Disc implements Playable {
 
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer("CD - ");
-		buffer.append("Title: " + getTitle() + " - ");
-		buffer.append("Category: " + getCategory() + " - ");
-		buffer.append("Director: " + getDirector() + " - ");
-		buffer.append("Length: " + getLength() + " - ");
-		buffer.append("Artist: " + getArtist() + " - ");
+		StringBuffer buffer = new StringBuffer("CD ___ ");
+		buffer.append("ID: " + getId() + " ___ ");
+		buffer.append("Title: " + getTitle() + " ___ ");
+		buffer.append("Category: " + getCategory() + " ___ ");
+		buffer.append("Director: " + getDirector() + " ___ ");
+		buffer.append("Length: " + getLength() + " ___ ");
+		buffer.append("Artist: " + getArtist() + " ___ ");
 		buffer.append(getCost() + " $");
 		return buffer.toString();
 	}	// close toString
